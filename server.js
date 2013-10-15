@@ -1,6 +1,9 @@
-//server  
+//redis
+var redis = require('redis')
+//express  
 var express = require('express');
-//listen
+
+//http server listen
 var server = express();
 server.listen(10080, function(){
 	console.log('createServer');
@@ -24,9 +27,10 @@ server.get('/socket.io/socket.io.js', function(req,res){
 
 //socketio Listen
 var io = require('socket.io').listen(18080);
+io.settings.log = false;
 
 io.sockets.on('connection',function(socket){
-	//http GET for load test
+	//http GET for load test これはテスト用
 	server.get('/hi', function(req,res){
    		var url = require('url').parse(req.url);
 		var ql = require('querystring').parse(url.query);
@@ -43,9 +47,20 @@ io.sockets.on('connection',function(socket){
     		res.end();
 	});
 
+	//redis publisher subscriber
+	var subscriber = redis.createClient(26379, '192.168.10.21');
+	var publisher = redis.createClient(26379, '192.168.10.21');
+	
+	subscriber.subscribe('socket message');
+	
+	subscriber.on('msg', function(channel,msg){
+		socket.emit('svr msg',msg);
+	});
+
+	//socket.io message　クライアントからメッセージ受信
 	socket.on('client msg',function(msg){
 
-		//msg to loga
+		//msg to log
 		console.log('msg = ' + msg );
 		//clietnip to log
 		var ip = socket.handshake.address.address;
@@ -60,14 +75,18 @@ io.sockets.on('connection',function(socket){
 		}
 		//edit mesage
 		var DD = new Date();
- 		var HH = ("0"+DD.getHours()).slice(-2);
- 		var MM = ("0"+DD.getMinutes()).slice(-2);
- 		var SS = ("0"+DD.getSeconds()).slice(-2);
+ 		var HH = ("0" + DD.getHours()).slice(-2);
+ 		var MM = ("0" + DD.getMinutes()).slice(-2);
+ 		var SS = ("0" + DD.getSeconds()).slice(-2);
  		msg = "[" + HH + ":" + MM +"." + SS +"]#   " + msg;
 		console.log('msg = " + msg');
-		//send message
-		socket.emit('svr msg',msg);
-		socket.broadcast.emit('svr msg',msg);
+		//send message クライアントへメッセージ送信
+		//まず送信者へ
+		socket.emit('svr msg', msg);
+		//みんなへ
+		socket.broadcast.emit('svr msg', msg);
+		//pub-sub （別のnodejsへ）
+		publisher.publish('socket message', msg);
 	});
 
 });
