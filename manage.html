@@ -1,0 +1,70 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<script src="http://192.168.56.21:18080/socket.io/socket.io.js"></script>
+<script src="http://192.168.56.21:10080/jquery-1.2.6.min.js"></script>
+<script>
+<!--
+jQuery(function(){
+  	var socket = io.connect('http://192.168.56.21:18080');
+
+  	socket.on('connect', function(){
+
+    		socket.on('svr msg',function(msg){
+			var maxclum=4;
+			for(i=1 ; i<=maxclum ; i++){
+				if(document.getElementById('msg'+i).textContent==""){
+					break;
+				}
+			}
+			if(i>maxclum){	
+				var tmp;
+				for(j=1; j<maxclum ; j++){
+					document.getElementById('msg'+j).textContent=document.getElementById('msg'+(j+1)).textContent;
+				}
+				document.getElementById('msg'+j).textContent=msg;
+			}else{
+				document.getElementById('msg'+i).textContent=msg;
+			}
+    		});
+
+  	});
+//  	jQuery("#submit").keypress(function(event){
+	jQuery("#btn").click(function(){
+//		if(event.which==13){
+			var msgstring=document.getElementById('msg').value;
+			var name=document.getElementById('nm').value;
+			msgstring=msgstring + "[" + name + "]";
+			if(msgstring!=""){
+				socket.emit('client msg',msgstring);
+				document.getElementById('msg').value="";
+			}
+//		}
+		
+	});	
+});
+//-->
+</script>
+</head>
+<body bgcolor="azure">
+<table border=0 bgcolor="lightcyan" >
+<tr>
+<td><font color="blue">メッセージ入力</font></td>
+<tr>
+<td><textarea type="textarea" id="msg" name="msg" bgcolor="azure" cols=40 rows=4 ></textarea></td>
+<tr><td>
+送信者の名前
+<input type="text" id="nm" name="nm" value="管理者" >
+</td></tr>
+<tr><td>
+<form id="form"><input type="button" id="btn" name="btn" value="送信"></form>
+</td></tr>
+
+</table>
+<div id="msg1" name="msg1"></div>
+<div id="msg2" name="msg2"></div>
+<div id="msg3" name="msg3"></div>
+<div id="msg4" name="msg4"></div>
+</body>
+</html>
