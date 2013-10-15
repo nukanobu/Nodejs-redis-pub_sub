@@ -91,7 +91,7 @@ io.sockets.on('connection',function(socket){
 		//pub-sub （別のnodejsへ）。上の２つはいらなくなる。
 		socket.emit('svr msg', msg);
 		//みんなへ
-		socket.broadcast.emit('svr msg', msg);
+		//socket.broadcast.emit('svr msg', msg);
 		//pub-sub （別のnodejsへ）
 		//subscriber.on でbroadcast.emit している。
 		publisher.publish('socket message', msg);
