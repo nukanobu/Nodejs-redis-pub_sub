@@ -40,7 +40,8 @@ io.sockets.on('connection',function(socket){
      			}else{
         			msg = ql.msg;
     			}	
-        		socket.broadcast.emit('svr msg',msg);
+        		//socket.broadcast.emit('svr msg',msg);
+			publisher.publish('socket message', msg);
 		}	
     		res.setHeader("Content-Type","text/html");
     		res.statusCode=200;
@@ -84,9 +85,10 @@ io.sockets.on('connection',function(socket){
 		//send message クライアントへメッセージ送信
 		//まず送信者へ
 		//socket.emit('svr msg', msg);
-		//みんなへ
+		//みんなへメッセージ送信
 		//socket.broadcast.emit('svr msg', msg);
-		//pub-sub （別のnodejsへ）上の２つはいらなくなる。
+
+		//pub-sub （別のnodejsへ）。上の２つはいらなくなる。
 		//subscriber.on でbroadcast.emit している。
 		publisher.publish('socket message', msg);
 	});
