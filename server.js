@@ -9,7 +9,7 @@ server.listen(10080, function(){
 //HTTP get method 
 server.get('/', function(req,res){
 	console.log('/');
-   	res.sendfile('./manage.html');
+	res.sendfile('./manage.html');
 });
 
 //HTTP get
