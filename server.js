@@ -83,12 +83,16 @@ io.sockets.on('connection',function(socket){
 		console.log('msg = " + msg');
 		//send message クライアントへメッセージ送信
 		//まず送信者へ
-		//socket.emit('svr msg', msg);
+		socket.emit('svr msg', msg);
 		//みんなへ
-		//socket.broadcast.emit('svr msg', msg);
-		//pub-sub （別のnodejsへ）上の２つはいらなくなる。
+		socket.broadcast.emit('svr msg', msg);
+		//pub-sub （別のnodejsへ）
 		//subscriber.on でbroadcast.emit している。
 		publisher.publish('socket message', msg);
+		//そういえば、sever側のnodejsを再起動すると、
+		//クライアントからコネクションが２つはられて、
+		//メッセージが２つ返ることがあったな。。。
+
 	});
 
 	socket.on('disconnect', function(){
