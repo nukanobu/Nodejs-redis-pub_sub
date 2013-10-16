@@ -56,7 +56,7 @@ io.sockets.on('connection',function(socket){
 	
 	subscriber.on('message', function(channel,msg){
 		console.log('subscriber msg =' + msg);
-		socket.broadcast.emit('svr msg', msg);
+		socket.emit('svr msg', msg);
 	});
 
 	//socket.io message　クライアントからメッセージ受信
@@ -81,7 +81,7 @@ io.sockets.on('connection',function(socket){
  		var MM = ("0" + DD.getMinutes()).slice(-2);
  		var SS = ("0" + DD.getSeconds()).slice(-2);
  		msg = "[" + HH + ":" + MM +"." + SS +"]#   " + msg;
-		console.log('msg = " + msg');
+		console.log('msg ='  + msg);
 		//send message クライアントへメッセージ送信
 		//まず送信者へ
 		//socket.emit('svr msg', msg);
@@ -89,7 +89,7 @@ io.sockets.on('connection',function(socket){
 		//socket.broadcast.emit('svr msg', msg);
 
 		//pub-sub （別のnodejsへ）。上の２つはいらなくなる。
-		socket.emit('svr msg', msg);
+		//socket.emit('svr msg', msg);
 		//みんなへ
 		//socket.broadcast.emit('svr msg', msg);
 		//pub-sub （別のnodejsへ）
