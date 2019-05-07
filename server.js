@@ -15,6 +15,7 @@ server.get('/', function(req,res){
 	res.sendfile('./manage.html');
 });
 
+
 //HTTP get
 server.get('/jquery-1.2.6.min.js', function(req,res){
 	console.log('/jquery-1.2.6.min.js');
